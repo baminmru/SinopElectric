@@ -1,0 +1,2211 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Мониторинг электрощитов.</title>
+	<link rel="stylesheet" href="./leaflet.css" />
+	<link rel="stylesheet" href="./css/rt.css" />
+	<script src="./leaflet.js" type="text/javascript"></script>
+	<script src="./dist/PruneCluster.js" type="text/javascript"></script>
+	<script src="./dist/AnimatedMarker.js" type="text/javascript"></script>
+	<script src="./layer/Marker.Text.js" type="text/javascript"></script>
+	<script src="./jquery-2.1.1.min.js" type="text/jscript"></script>
+	
+	<script src="./draw/src/leaflet.circle.topolygon-src.js"></script>
+	<script src="./draw/src/Leaflet.draw.js"></script>
+    <script src="./draw/src/Leaflet.Draw.Event.js"></script>
+    <link rel="stylesheet" href="./draw/src/leaflet.draw.css"/>
+
+    <script src="./draw/src/Toolbar.js"></script>
+    <script src="./draw/src/Tooltip.js"></script>
+
+    <script src="./draw/src/ext/GeometryUtil.js"></script>
+    <script src="./draw/src/ext/LatLngUtil.js"></script>
+    <script src="./draw/src/ext/LineUtil.Intersect.js"></script>
+    <script src="./draw/src/ext/Polygon.Intersect.js"></script>
+    <script src="./draw/src/ext/Polyline.Intersect.js"></script>
+    <script src="./draw/src/ext/TouchEvents.js"></script>
+
+    <script src="./draw/src/draw/DrawToolbar.js"></script>
+    <script src="./draw/src/draw/handler/Draw.Feature.js"></script>
+    <script src="./draw/src/draw/handler/Draw.SimpleShape.js"></script>
+    <script src="./draw/src/draw/handler/Draw.Polyline.js"></script>
+    <script src="./draw/src/draw/handler/Draw.Circle.js"></script>
+    <script src="./draw/src/draw/handler/Draw.Marker.js"></script>
+    <script src="./draw/src/draw/handler/Draw.Polygon.js"></script>
+    <script src="./draw/src/draw/handler/Draw.Rectangle.js"></script>
+
+
+    <script src="./draw/src/edit/EditToolbar.js"></script>
+    <script src="./draw/src/edit/handler/EditToolbar.Edit.js"></script>
+    <script src="./draw/src/edit/handler/EditToolbar.Delete.js"></script>
+
+    <script src="./draw/src/Control.Draw.js"></script>
+
+    <script src="./draw/src/edit/handler/Edit.Poly.js"></script>
+    <script src="./draw/src/edit/handler/Edit.SimpleShape.js"></script>
+    <script src="./draw/src/edit/handler/Edit.Circle.js"></script>
+    <script src="./draw/src/edit/handler/Edit.Rectangle.js"></script>
+    <script src="./draw/src/edit/handler/Edit.Marker.js"></script>
+	
+	<script src="./dist/easy-button.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="./dist/easy-button.css"/>
+	<script src="./dist/jQuery.print.js" type="text/javascript"></script>
+	
+	
+	<link rel="stylesheet" href="./dist/Control.FullScreen.css"/>
+	<script src="./dist/Control.FullScreen.js"></script>
+	
+</head>
+<body oncontextmenu="return false">
+	<!-- <div style="position:absolute; top:0px; left:0px; height:30px; ruight:0px; background: #f0f0f0; padding:10px; overflow-y: scroll;" id="brief">
+	<table border="0">
+	<tr><td width="90px" ><span id="vP1">?</span></td>	<td width="90px" ><span id="vP2">?</span></td>	<td width="90px" ><span id="vP3">?</span></td>	<td width="90px" ><span id="vP4">?</span></td>	<td width="90px" ><span id="vP5">?</span></td>	<td width="90px" ><span id="vP6">?</span></td>	<td width="90px" ><span id="vP7">?</span></td>	<td width="90px" ><span id="vP8">?</span></td>	<td width="90px" ><span id="vP9">?</span></td>	<td width="90px" ><span id="vP0">?</span></td>	</tr>
+	</table>
+	</div>	
+	-->
+	<div style="position:absolute; width:1600px; left:350px; bottom:0px; top:0px; background: #f0f0f0;" id="map"></div>
+	
+	<div style="position:absolute; top:0px; left:0px; right:0px; bottom:0px; width:350px; background: #ffffff; padding:10px;" id="brief">
+	<img src="./images/R.logo.png" border="0"; width="195px"; height="96px";  />
+	<div>
+	<h2>Спб, Синопская д.14, ГРЩ-1</h2>
+	<!--
+	<h3> Напряжение</h3>
+	<ul>
+	<li><a href="#" onclick='GetDitail("81.1");'>Ввод 1  : <span id="vP1">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.2");'>Ввод 2  : <span id="vP2">?</span></a></li>
+	</ul>
+	
+	<h3> Автоматы АВ</h3>
+	<ul>
+	<li><a href="#" onclick='GetDitail("81.1");'>1АВ  : <span id="v1AB">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.2");'>2AB  : <span id="v2AB">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.3");'>3AB  : <span id="v3AB">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.4");'>4AB  : <span id="v4AB">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.5");'>5AB  : <span id="v5AB">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.6");'>6AB  : <span id="v6AB">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.6");'>7AB  : <span id="v7AB">?</span></a></li>
+	</ul>
+	
+	<h3> Автоматы АВP</h3>
+	<ul>
+	<li><a href="#" onclick='GetDitail("81.1");'>АВP ЭПУ№ 1  : <span id="vABP1">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.2");'>ABP ЭПУ№ 3  : <span id="vABP3">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.3");'>ABP ЭПУ№ 4  : <span id="vABP4">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.4");'>ABP ЭПУ№ 5  : <span id="vABP5">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.5");'>ABP ЭПУ№ 6  : <span id="vABP6">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.6");'>ABP ЭПУ№ 7  : <span id="vABP7">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.6");'>ABP ЭПУ№ 6  : <span id="vABP8">?</span></a></li>
+	</ul>
+	
+	<h3> Автоматы АДЭС</h3>
+	<ul>
+	<li><a href="#" onclick='GetDitail("81.1");'>АДЭС№ 1  : <span id="vADES1">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.2");'>АДЭС№ 2  : <span id="vADES2">?</span></a></li>
+	<li><a href="#" onclick='GetDitail("81.3");'>АДЭС№ 3  : <span id="vADES3">?</span></a></li>
+	
+	</ul>
+	-->
+	
+	
+	<h3> Режим подключения</h3>
+	<ul>
+	<li><a href="#" onclick='Mode_1();'>Ввод 1 и 2</a></li>
+	<li><a href="#" onclick='Mode_2();'>Ввод 2 + Дизеля</a></li>
+	<li><a href="#" onclick='Mode_3();'>Ввод 1 + Дизеля </a></li>
+	<li><a href="#" onclick='Mode_4();'>Только Дизеля</a></li>
+	<li><a href="#" onclick='Mode_5();'>Только Ввод 1</a></li>
+	<li><a href="#" onclick='Mode_6();'>Только Ввод 2</a></li>
+	
+	</ul>
+	
+	</div>
+	</div>
+<script type='text/javascript'>
+
+	var imgW=1898;
+	var imgH=1364;
+	var lineSpeed=500000;
+
+	var imageUrl = './images/sinop1.png', imageBounds = [[-imgH/20, -imgW/20], [imgH/20, imgW/20]];
+	
+	var map = L.map('map', { minZoom: 0, maxZoom:10 ,attributionControl:false,fullscreenControl: true,
+			fullscreenControlOptions: { // optional
+				title:"Перейти в полноэкранный режим",
+				titleCancel:"Выход из полноэкранного режима"
+			}});  //.setView([27, 44], 3);
+    map.attributionControl = false;
+    L.imageOverlay(imageUrl, imageBounds, { opacity: 1 }).addTo(map); // , attribution: 'Цех:<%=GetC()%>'
+	map.setView([-2, 0], 3);
+	//	map.fitBounds(imageBounds);
+	map.setMaxBounds([[-imgH/15, -imgW/15], [imgH/15, imgW/15]])
+	
+	
+	
+	var myIconBlue = L.icon({
+    iconUrl: './images/electron.png',
+	//iconUrl: './images/electron1.png',
+    //shadowUrl: 'leaf-shadow.png',
+
+    iconSize:     [16, 16], // size of the icon
+    //shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [8, 8], // point of the icon which will correspond to marker's location
+    //shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-20, -20] // point from which the popup should open relative to the iconAnchor
+	});
+	
+	
+	var myIcon = L.icon({
+    //iconUrl: './images/electron.png',
+	iconUrl: './images/electron1.png',
+    //shadowUrl: 'leaf-shadow.png',
+
+    iconSize:     [16, 16], // size of the icon
+    //shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [8, 8], // point of the icon which will correspond to marker's location
+    //shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-20, -20] // point from which the popup should open relative to the iconAnchor
+	});
+	
+	
+	var GenIcon = L.icon({
+    
+	iconUrl: './images/wave.gif',
+    //shadowUrl: 'leaf-shadow.png',
+
+    iconSize:     [32, 16], // size of the icon
+    //shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [0, 0], // point of the icon which will correspond to marker's location
+    //shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+	});
+
+	
+	var EmptyIcon = L.icon({
+    iconUrl: './images/empty.png',
+    //shadowUrl: 'leaf-shadow.png',
+
+    iconSize:     [16, 16], // size of the icon
+    //shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [8, 8], // point of the icon which will correspond to marker's location
+    //shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-20, -20] // point from which the popup should open relative to the iconAnchor
+	});
+	
+	L.easyButton({
+	  id: 'id-map-print',  // an id for the generated button
+	  position: 'topleft',      // inherited from L.Control -- the corner it goes in
+	  type: 'replace',          // set to animate when you're comfy with css
+	  leafletClasses: true,     // use leaflet classes to style the button?
+	  states:[{                 // specify different icons and responses for your button
+		stateName: 'map-print',
+		onClick: function(button, map){
+			$('#map').print();
+		},
+		title: 'Печать',
+		icon: '<img src="./images/print.png" width="18px;" height="18px">'
+	  }]
+	}).addTo( map );
+	
+	
+	/*
+	
+	var  drawnItems = L.featureGroup().addTo(map);
+	
+	
+    map.addControl(new L.Control.Draw({
+        edit: {
+            featureGroup: drawnItems,
+            poly: {
+                allowIntersection: false
+            }
+        },
+        draw: {
+            polygon: {
+                allowIntersection: false,
+                showArea: true
+            }
+        }
+    }));
+	
+	*/
+	
+
+	var rgb = '#00FF00'; // green
+	var bounds;
+    map.on(L.Draw.Event.CREATED, function (event) {
+        var layer = event.layer;
+        var s ="";
+		
+		if(typeof layer.toPolygon =='undefined'){
+			s= JSON.stringify(layer.toGeoJSON()) ;
+			drawnItems.addLayer(layer);
+			alert (s);
+		}else{
+			bounds=layer.toPolygon(24,map);
+			var player= L.polygon( bounds, {  color: rgb, opacity: 1.0, fillOpacity: 1, weight: 1 } );
+			s= JSON.stringify(player.toGeoJSON());
+			drawnItems.addLayer(player);
+			alert (s);
+		}
+		
+		
+		$.ajax({
+		  type: 'GET',
+		  url: './savelayer.aspx',
+		  data: 'P=sinop1&L=' +s,
+		  success: function(data){
+			//$('.results').html(data);
+		  }
+		});
+		
+    });
+	
+	map.on('contextmenu',function(event){ }); 
+	
+	
+	
+	
+	
+	
+	var myLines=[];
+	var myObjects =[];
+	var blink=true;
+	  
+	    function MapX(X) {
+            var mx = parseInt(X);
+            mx = mx / 10 -imgW/20;
+            return mx;
+        }
+
+        function MapY(Y) {
+            var my = parseInt(Y);
+            my =  imgH/20 - my / 10;
+            return my;
+        }
+	
+	var rect;
+	var bounds;
+	var rgb = '#00FF00'; // green
+	var marker;
+
+	
+
+	bounds=FlipLL([[-24.082031250000004,34.161818161230386],[-24.082031250000004,40.51379915504413],[-15.029296875000002,40.51379915504413],[-15.029296875000002,34.161818161230386],[-24.082031250000004,34.161818161230386]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = '1AB';
+	rect.bindTooltip('1AB')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	bounds=FlipLL([[7.382812500000001,34.23451236236987],[7.382812500000001,40.51379915504413],[16.171875000000004,40.51379915504413],[16.171875000000004,34.23451236236987],[7.382812500000001,34.23451236236987]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = '2AB';
+	rect.bindTooltip('2AB')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	
+	bounds=FlipLL([[-7.119140625,6.489983332670651],[-7.119140625,17.392579271057766],[7.207031250000001,17.392579271057766],[7.207031250000001,6.489983332670651],[-7.119140625,6.489983332670651]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = '3AB';
+	rect.bindTooltip('3AB')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	
+	
+	bounds=FlipLL([[34.80468750000001,26.667095801104814],[34.80468750000001,32.84267363195431],[43.59375000000001,32.84267363195431],[43.59375000000001,26.667095801104814],[34.80468750000001,26.667095801104814]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = '4AB';
+	rect.bindTooltip('4AB')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	
+	
+	bounds=FlipLL([[53.70117187500001,26.509904531413927],[53.70117187500001,32.7688004848817],[62.75390625000001,32.7688004848817],[62.75390625000001,26.509904531413927],[53.70117187500001,26.509904531413927]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = '5AB';
+	rect.bindTooltip('5AB')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	bounds=FlipLL([[74.88281250000001,26.82407078047018],[74.88281250000001,32.84267363195431],[83.05664062500001,32.84267363195431],[83.05664062500001,26.82407078047018],[74.88281250000001,26.82407078047018]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = '6AB';
+	rect.bindTooltip('6AB')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	
+	bounds=FlipLL([[21.533203125000004,6.926426847059551],[21.533203125000004,17.644022027872726],[32.95898437500001,17.644022027872726],[32.95898437500001,6.926426847059551],[21.533203125000004,6.926426847059551]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = '7AB';
+	rect.bindTooltip('7AB')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+		
+	
+	
+	
+	
+	
+	// подключение  сверху
+	bounds=FlipLL([[-81.38671875000001,7.710991655433217],[-81.38671875000001,-24.206889622398023]]);
+	var el1 = L.animatedMarker(bounds, {
+      icon: myIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+      onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIcon);
+        });
+      }
+    });
+    map.addLayer(el1);
+	myLines.push(el1);
+	
+	
+	
+	bounds=FlipLL([[-68.20312500000001,8.059229627200192],[-68.37890625000001,-32.546813173515154]]);
+	var el2 = L.animatedMarker(bounds, {
+      icon: myIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+      onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIcon);
+        });
+      }
+    });
+    map.addLayer(el2);
+	myLines.push(el2);
+	
+		
+	bounds=FlipLL([[-51.15234375,7.710991655433217],[-51.32812500000001,-40.4469470596005]]);
+	var el3 = L.animatedMarker(bounds, {
+      icon: myIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+      onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIcon);
+        });
+      }
+    });
+    map.addLayer(el3);
+	myLines.push(el3);
+	
+		
+	bounds=FlipLL([[-42.36328125000001,7.710991655433217],[-42.36328125000001,-22.59372606392931],[-37.79296875000001,-22.91792293614603],[-37.61718750000001,-47.8721439688873]]);
+	var el4 = L.animatedMarker(bounds, {
+      icon: myIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+      onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIcon);
+        });
+      }
+    });
+    map.addLayer(el4);
+	myLines.push(el4);
+	
+	
+		
+	bounds=FlipLL([[-35.50781250000001,7.536764322084078],[-34.98046875000001,-20.3034175184893],[-20.742187500000004,-21.12549763660628],[-20.742187500000004,-53.748710796898976]]);
+	var el5 = L.animatedMarker(bounds, {
+      icon: myIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+       onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIcon);
+        });
+      }
+    });
+    map.addLayer(el5);
+	myLines.push(el5);
+	
+		
+	bounds=FlipLL([[-27.949218750000004,7.885147283424331],[-27.773437500000004,-15.961329081596647],[-1.40625,-15.961329081596647],[-1.0546875000000002,-59.265880628258095]]);
+	var el6 = L.animatedMarker(bounds, {
+      icon: myIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+      onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIcon);
+        });
+      }
+    });
+    map.addLayer(el6);
+	myLines.push(el6);
+	
+	
+		
+	bounds=FlipLL([[-22.148437500000004,7.18810087117902],[-21.972656250000004,-13.2399454992863],[18.984375000000004,-13.2399454992863],[19.16015625,-64.01449619484472]]);
+	var el7 = L.animatedMarker(bounds, {
+      icon: myIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+      onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIcon);
+        });
+      }
+    });
+    map.addLayer(el7);
+	myLines.push(el7);
+	
+	
+	
+	// подключение  справа
+	bounds=FlipLL([[90.17578125000001,-26.902476886279807],[-75.05859375000001,-27.059125784374054]]);
+	var el11 = L.animatedMarker(bounds, {
+      icon: myIconBlue,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+       onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIconBlue);
+        });
+      }
+    });
+    map.addLayer(el11);
+	myLines.push(el11);
+	
+	
+	bounds=FlipLL([[89.82421875000001,-35.460669951495305],[-58.53515625000001,-35.460669951495305]]);
+	var el12 = L.animatedMarker(bounds, {
+      icon: myIconBlue,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIconBlue);
+        });
+      }
+    });
+    map.addLayer(el12);
+	myLines.push(el12);
+	
+	
+		
+	bounds=FlipLL([[89.82421875000001,-43.197167282501276],[-40.95703125000001,-43.06888777416962]]);
+	var el13 = L.animatedMarker(bounds, {
+      icon: myIconBlue,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+      onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIconBlue);
+        });
+      }
+    });
+    map.addLayer(el13);
+	myLines.push(el13);
+	
+	
+		
+	bounds=FlipLL([[90,-49.95121990866204],[-24.609375000000004,-49.61070993807422]]);
+	var el14 = L.animatedMarker(bounds, {
+      icon: myIconBlue,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIconBlue);
+        });
+      }
+    });
+    map.addLayer(el14);
+	myLines.push(el14);
+	
+	
+		
+	bounds=FlipLL([[89.82421875000001,-55.47885346331034],[-7.910156250000001,-55.57834467218206]]);
+	var el15 = L.animatedMarker(bounds, {
+      icon: myIconBlue,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+      onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIconBlue);
+        });
+      }
+    });
+    map.addLayer(el15);
+	myLines.push(el15);
+	
+		
+	bounds=FlipLL([[90.35156250000001,-61.18562468142282],[8.789062500000002,-61.43876749368282]]);
+	var el16 = L.animatedMarker(bounds, {
+      icon: myIconBlue,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIconBlue);
+        });
+      }
+    });
+    map.addLayer(el16);
+	myLines.push(el16);
+	
+	
+		
+	bounds=FlipLL([[90,-65.44000165965534],[27.773437500000004,-65.36683689226321]]);
+	var el17 = L.animatedMarker(bounds, {
+      icon: myIconBlue,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+      onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIconBlue);
+        });
+      }
+    });
+    map.addLayer(el17);
+	myLines.push(el17);
+	
+	
+	// Варианты подачи  энергии
+	
+	bounds=FlipLL([[-15.996093750000002,63.470144746565445],[-16.347656250000004,7.885147283424331],[-89.12109375000001,8.059229627200192]]);
+	var el21 = L.animatedMarker(bounds, {
+      icon: myIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIcon);
+        });
+      }
+    });
+    map.addLayer(el21);
+	myLines.push(el21);
+	
+	
+	bounds=FlipLL([[15.292968750000002,64.0914075226231],[15.292968750000002,7.710991655433217],[-88.59375000000001,8.059229627200192]]);
+	var el22 = L.animatedMarker(bounds, {
+      icon: myIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIcon);
+        });
+      }
+    });
+    map.addLayer(el22);
+	myLines.push(el22);
+	
+	
+	bounds=FlipLL([[15.468750000000002,63.39152174400885],[14.941406250000002,7.885147283424331],[91.58203125000001,7.536764322084078],[91.7578125,-66.51326044311186]]);
+	var el23 = L.animatedMarker(bounds, {
+      icon: myIconBlue,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIconBlue);
+        });
+      }
+    });
+    map.addLayer(el23);
+	myLines.push(el23);
+	
+	// дизеля
+	
+	bounds=FlipLL([[42.36328125000001,51.72702815704777],[42.36328125000001,7.885147283424331],[92.10937500000001,7.536764322084078],[91.40625000000001,-65.94647177615738]]);
+	var el31 = L.animatedMarker(bounds, {
+      icon: myIconBlue,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIconBlue);
+        });
+      }
+    });
+    map.addLayer(el31);
+	myLines.push(el31);
+	
+	
+	bounds=FlipLL([[61.69921875000001,51.50874245880335],[62.05078125000001,8.059229627200192],[92.4609375,7.18810087117902],[92.10937500000001,-66.51326044311186]]);
+	var el32 = L.animatedMarker(bounds, {
+      icon: myIconBlue,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+      onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIconBlue);
+        });
+      }
+    });
+    map.addLayer(el32);
+	myLines.push(el32);
+	
+	
+	bounds=FlipLL([[82.61718750000001,51.39920565355378],[82.96875000000001,7.710991655433217],[92.10937500000001,7.013667927566642],[91.40625000000001,-65.94647177615738]]);
+	var el33 = L.animatedMarker(bounds, {
+      icon: myIconBlue,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(myIconBlue);
+        });
+      }
+    });
+    map.addLayer(el33);
+	myLines.push(el33);
+	
+	
+	var TopIcon = myIcon;
+	var LeftIcon= myIconBlue;
+	
+	// выходы зел
+	bounds=FlipLL([[-84.55078125,-32.69486597787506],[-84.55078125,-42.55308028895581]]);
+	var el41 = L.animatedMarker(bounds, {
+      icon: TopIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(TopIcon);
+        });
+      }
+    });
+    map.addLayer(el41);
+	myLines.push(el41);
+	
+	
+	bounds=FlipLL([[-68.02734375000001,-40.58058466412763],[-68.20312500000001,-49.15296965617039]]);
+	var el42 = L.animatedMarker(bounds, {
+      icon: TopIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(TopIcon);
+        });
+      }
+    });
+    map.addLayer(el42);
+	myLines.push(el42);
+	
+	bounds=FlipLL([[-51.50390625000001,-47.63578359086485],[-51.32812500000001,-54.97761367069625]]);
+	var el43 = L.animatedMarker(bounds, {
+      icon: TopIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(TopIcon);
+        });
+      }
+    });
+    map.addLayer(el43);
+	myLines.push(el43);
+	
+	bounds=FlipLL([[-34.80468750000001,-53.85252660044952],[-34.80468750000001,-60.58696734225869]]);
+	var el44 = L.animatedMarker(bounds, {
+      icon: TopIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(TopIcon);
+        });
+      }
+    });
+    map.addLayer(el44);
+	myLines.push(el44);
+	
+	bounds=FlipLL([[-18.632812500000004,-59.355596110016315],[-18.632812500000004,-63.704722429433225]]);
+	var el45 = L.animatedMarker(bounds, {
+      icon: TopIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(TopIcon);
+        });
+      }
+    });
+    map.addLayer(el45);
+	myLines.push(el45);
+	
+	
+	
+	
+	//bounds=FlipLL([[1.7578125000000002,-63.93737246791483],[1.9335937500000002,-67.27204267399519]]);
+	bounds=FlipLL([[-3.0761718750000004,-63.78248603116502],[-3.1640625000000004,-67.13582938531948]]);
+	var el46 = L.animatedMarker(bounds, {
+      icon: TopIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(TopIcon);
+        });
+      }
+    });
+    map.addLayer(el46);
+	myLines.push(el46);
+	
+	
+	bounds=FlipLL([[11.953125000000002,-65.18303007291381],[7.822265625000001,-65.21989393613208]]);
+	var el47 = L.animatedMarker(bounds, {
+      icon: TopIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(TopIcon);
+        });
+      }
+    });
+    map.addLayer(el47);
+	myLines.push(el47);
+	
+	
+	
+	// выходы син
+	bounds=FlipLL([[-79.27734375000001,-32.69486597787506],[-79.36523437500001,-42.42345651793833]]);
+	var el51 = L.animatedMarker(bounds, {
+      icon: LeftIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(LeftIcon);
+        });
+      }
+    });
+    map.addLayer(el51);
+	myLines.push(el51);
+	
+	
+	bounds=FlipLL([[-63.10546875000001,-40.58058466412763],[-63.19335937500001,-49.21042044565029]]);
+	var el52 = L.animatedMarker(bounds, {
+      icon: LeftIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(LeftIcon);
+        });
+      }
+    });
+    map.addLayer(el52);
+	myLines.push(el52);
+	
+	bounds=FlipLL([[-45.79101562500001,-47.576525713746214],[-45.87890625,-55.27911529201562]]);
+	var el53 = L.animatedMarker(bounds, {
+      icon: LeftIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(LeftIcon);
+        });
+      }
+    });
+    map.addLayer(el53);
+	myLines.push(el53);
+	
+	bounds=FlipLL([[-29.355468750000004,-53.80065082633022],[-29.443359375000004,-60.413852350464914]]);
+	var el54 = L.animatedMarker(bounds, {
+      icon: LeftIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(LeftIcon);
+        });
+      }
+    });
+    map.addLayer(el54);
+	myLines.push(el54);
+	
+	bounds=FlipLL([[-13.359375000000002,-59.17592824927136],[-13.359375000000002,-63.66576033778838]]);
+	var el55 = L.animatedMarker(bounds, {
+      icon: LeftIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(LeftIcon);
+        });
+      }
+    });
+    map.addLayer(el55);
+	myLines.push(el55);
+	
+	
+	
+	
+	bounds=FlipLL([[1.7578125000000002,-63.93737246791483],[1.9335937500000002,-67.27204267399519]]);
+	var el56 = L.animatedMarker(bounds, {
+      icon: LeftIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(LeftIcon);
+        });
+      }
+    });
+    map.addLayer(el56);
+	myLines.push(el56);
+	
+	
+	bounds=FlipLL([[12.041015625000002,-67.03316279015063],[7.822265625000001,-67.03316279015063]]);
+	var el57 = L.animatedMarker(bounds, {
+      icon: LeftIcon,
+      autoStart: false,
+	  distance: lineSpeed,  // meters
+	  interval: 200, // milliseconds
+     onEnd: function() {
+		var self=this;
+	     $(this._icon).fadeOut(200, function(){
+          self.setIcon(EmptyIcon);
+		  self.start();
+        });
+		
+      }, 
+	  onStart: function() {
+			var self=this;
+	     $(this._icon).fadeIn(200, function(){
+          self.setIcon(LeftIcon);
+        });
+      }
+    });
+    map.addLayer(el57);
+	myLines.push(el57);
+	
+	
+	
+	
+	//  сверху
+	bounds=FlipLL([[-75.32226562500001,-24.046463999666567],[-87.97851562500001,-24.046463999666567],[-88.154296875,-32.546813173515154],[-75.32226562500001,-24.046463999666567]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP1';
+	rect.bindTooltip('ABP1')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	
+	bounds=FlipLL([[-58.88671875000001,-32.69486597787506],[-74.00390625000001,-32.76880048488169],[-74.00390625000001,-40.64730356252251],[-58.88671875000001,-32.69486597787506]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP3';
+	rect.bindTooltip('ABP3')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	bounds=FlipLL([[-41.30859375000001,-40.58058466412763],[-56.42578125000001,-40.780541431860314],[-56.51367187500001,-47.5172006978394],[-41.30859375000001,-40.58058466412763]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP4';
+	rect.bindTooltip('ABP4')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	
+	bounds=FlipLL([[-24.78515625,-47.576525713746214],[-39.99023437500001,-47.576525713746214],[-39.90234375000001,-53.69670647530323],[-24.78515625,-47.576525713746214]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP5';
+	rect.bindTooltip('ABP5')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+
+	
+	
+	
+	bounds=FlipLL([[-7.822265625000001,-53.80065082633022],[-23.291015625000004,-53.90433815627469],[-23.378906250000004,-59.085738569819505],[-7.822265625000001,-53.80065082633022]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP6';
+	rect.bindTooltip('ABP6')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+
+	
+	bounds=FlipLL([[8.701171875000002,-59.17592824927136],[-6.767578125000001,-59.22093407615045],[-6.855468750000001,-63.78248603116502],[8.701171875000002,-59.17592824927136]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP7';
+	rect.bindTooltip('ABP7')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	
+	bounds=FlipLL([[27.685546875000004,-63.860035895395306],[12.128906250000002,-63.860035895395306],[11.865234375,-67.7427590666639],[27.685546875000004,-63.860035895395306]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP8';
+	rect.bindTooltip('ABP8')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	//слева
+	bounds=FlipLL([[-75.27832031250001,-24.006326198751115],[-88.06640625000001,-32.69486597787506],[-75.32226562500001,-32.73184089686568],[-75.27832031250001,-24.006326198751115]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP1L';
+	rect.bindTooltip('ABP1')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	
+	bounds=FlipLL([[-58.71093750000001,-32.69486597787506],[-58.79882812500001,-40.51379915504413],[-73.74023437500001,-40.4469470596005],[-58.71093750000001,-32.69486597787506]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP3L';
+	rect.bindTooltip('ABP3')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	bounds=FlipLL([[-41.39648437500001,-40.51379915504413],[-41.48437500000001,-47.63578359086485],[-56.337890625,-47.576525713746214],[-41.39648437500001,-40.51379915504413]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP4L';
+	rect.bindTooltip('ABP4')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	
+	bounds=FlipLL([[-24.697265625000004,-47.63578359086485],[-24.873046875000004,-53.748710796898976],[-39.90234375000001,-53.85252660044952],[-24.697265625000004,-47.63578359086485]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP5L';
+	rect.bindTooltip('ABP5')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+
+	
+	
+	
+	bounds=FlipLL([[-7.822265625000001,-53.85252660044952],[-23.291015625000004,-59.085738569819505],[-7.734375000000001,-59.130863097255904],[-7.822265625000001,-53.85252660044952]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP6L';
+	rect.bindTooltip('ABP6')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+
+	
+	bounds=FlipLL([[8.701171875000002,-59.265880628258095],[8.701171875000002,-63.821287652613826],[-6.767578125000001,-63.78248603116502],[8.701171875000002,-59.265880628258095]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP7L';
+	rect.bindTooltip('ABP7')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	
+	bounds=FlipLL([[27.597656250000004,-63.89873081524392],[27.421875000000004,-67.7427590666639],[12.041015625000002,-67.8092445060001],[27.597656250000004,-63.89873081524392]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ABP8L';
+	rect.bindTooltip('ABP8')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	
+	
+	
+	
+	bounds=FlipLL([[40.49560546875001,51.549751017014195],[40.53955078125001,51.998410382390325],[40.80322265625001,52.496159531097106],[41.15478515625001,52.84259457223952],[41.83593750000001,53.09402405506328],[42.36328125000001,53.133589829244826],[42.97851562500001,53.014783245859235],[43.41796875000001,52.76289173758374],[43.74755859375,52.45600939264076],[43.96728515625001,51.984880139916655],[43.96728515625001,51.440312757160115],[43.83544921875001,50.90303283111257],[43.39599609375001,50.47149085139956],[42.97851562500001,50.261253827584724],[42.67089843750001,50.14874640066278],[42.36328125000001,50.13466432216696],[41.96777343750001,50.17689812200107],[41.61621093750001,50.21909462044748],[41.17675781250001,50.401515322782366],[40.86914062500001,50.708634400828224],[40.58349609375001,51.11041991029264],[40.49560546875001,51.549751017014195]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ADES1';
+	rect.bindTooltip('ADES1')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	
+	bounds=FlipLL([[61.50146484375001,50.14874640066278],[61.10595703125001,50.162824333817284],[60.71044921875001,50.261253827584724],[60.33691406250001,50.47149085139956],[60.02929687500001,50.75035931136963],[59.87548828125001,51.02757633780243],[59.69970703125,51.37178037591739],[59.72167968750001,51.68617954855624],[59.74365234375001,51.944264879028765],[59.80957031250001,52.1874047455997],[59.98535156250001,52.496159531097106],[60.29296875000001,52.76289173758374],[60.60058593750001,52.96187505907603],[60.99609375000001,53.10721669189343],[61.39160156250001,53.1599467884681],[61.89697265625001,53.10721669189343],[62.27050781250001,53.001562274591464],[62.62207031250001,52.81604319154934],[62.95166015625001,52.5095347703273],[63.14941406250001,52.16045455774706],[63.23730468750001,51.754240074033525],[63.19335937500001,51.34433866059924],[63.06152343750001,50.99992885585966],[62.84179687500001,50.666872321810715],[62.46826171875001,50.401515322782366],[62.07275390625001,50.205033264943346],[61.50146484375001,50.14874640066278]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ADES2';
+	rect.bindTooltip('ADES2')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+
+	
+	
+	bounds=FlipLL([[82.08984375000001,50.0923932109388],[81.71630859375001,50.162824333817284],[81.27685546875001,50.275298611425185],[81.01318359375001,50.45750402042058],[80.74951171875001,50.63901028125873],[80.61767578125001,50.90303283111257],[80.41992187500001,51.23440735163461],[80.39794921875001,51.590722643120166],[80.41992187500001,51.97134580885172],[80.57373046875001,52.36218321674427],[80.81542968750001,52.62972886718355],[81.05712890625001,52.855864177853995],[81.36474609375001,53.028000167735165],[81.73828125000001,53.133589829244826],[82.08984375000001,53.186287573913305],[82.52929687500001,53.133589829244826],[82.92480468750001,52.98833725339543],[83.27636718750001,52.802761415419674],[83.54003906250001,52.522905940278065],[83.75976562500001,52.25470880113083],[83.86962890625001,51.84935276370605],[83.91357421875001,51.481382896100975],[83.75976562500001,51.055207338584964],[83.51806640625001,50.708634400828224],[83.23242187500001,50.47149085139956],[82.90283203125001,50.261253827584724],[82.55126953125001,50.13466432216696],[82.08984375000001,50.0923932109388]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'ADES3';
+	rect.bindTooltip('ADES3')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	bounds=FlipLL([[-28.828125000000004,42.16340342422403],[-28.828125000000004,65.07213008560697],[-1.7578125000000002,65.07213008560697],[-1.7578125000000002,42.16340342422403],[-28.828125000000004,42.16340342422403]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'P1';
+	rect.bindTooltip('P1')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	//var P1GEN=L.marker([45.9511496866914,-23.378906250000004],{icon:GenIcon}).addTo(map)
+
+	bounds=FlipLL([[2.4609375000000004,42.032974332441405],[2.4609375000000004,65.14611484756375],[29.531250000000004,65.14611484756375],[29.531250000000004,42.032974332441405],[2.4609375000000004,42.032974332441405]]);
+	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
+	rect.tag = 'P2';
+	rect.bindTooltip('P2')
+	rect.on('contextmenu',function(event){ });
+	rect.on('dblclick',function(event){ });
+	rect.on('contextmenu',function(event){ }); 
+    rect.blink = blink;
+	myObjects.push(rect);
+	rect.addTo(map);
+	
+	
+	
+	//var P2GEN=L.marker([45.9511496866914,9.316406250000002],{icon:GenIcon}).addTo(map)
+	
+    
+
+	
+	function FlipLL(b) {
+		var fb;
+		var point;
+		var j;
+		fb=[];
+		for (j = 0; j < b.length; j++) {
+			 point =new  L.latLng(
+			  b[j][1],               
+			  b[j][0],               
+               b[j][2]             
+            );
+			fb.push(point)
+		}
+		return fb;
+	}
+	
+	function StopLines(){
+		for (j = 0; j < myLines.length; j++) {
+			myLines[j].setIcon(EmptyIcon);
+        }
+		
+		for (j = 0; j < myLines.length; j++) {
+			myLines[j].stop();
+        }
+		
+		for (j = 0; j < myLines.length; j++) {
+			map.removeLayer(myLines[j]);
+        }
+	}
+
+	var curMode=StopLines;
+	
+	function Mode_1(){
+		curMode=Mode_1;
+	
+		SetObject("P1","GREEN","NO");
+		SetObject("P2","BLUE","NO");
+		
+		
+		SetObject("1AB","GREEN","NO");
+		SetObject("2AB","BLUE","NO");
+		SetObject("3AB","YELLOW","NO");
+		SetObject("4AB","YELLOW","NO");
+		SetObject("5AB","YELLOW","NO");
+		SetObject("6AB","YELLOW","NO");
+		SetObject("7AB","BLUE","NO");
+		
+		SetObject("ADES1","GRAY","NO");
+		SetObject("ADES2","GRAY","NO");
+		SetObject("ADES3","GRAY","NO");
+		
+		SetObject("ABP1","GREEN","NO");
+		SetObject("ABP3","GREEN","NO");
+		SetObject("ABP4","GREEN","NO");
+		SetObject("ABP5","GREEN","NO");
+		SetObject("ABP6","GREEN","NO");
+		SetObject("ABP7","GREEN","NO");
+		SetObject("ABP8","GREEN","NO");
+		
+		SetObject("ABP1L","BLUE","NO");
+		SetObject("ABP3L","BLUE","NO");
+		SetObject("ABP4L","BLUE","NO");
+		SetObject("ABP5L","BLUE","NO");
+		SetObject("ABP6L","BLUE","NO");
+		SetObject("ABP7L","BLUE","NO");
+		SetObject("ABP8L","BLUE","NO");
+	
+		StopLines();
+		// первый ввод
+		el21.addTo(map).start();
+		
+		el1.addTo(map).start();
+		el2.addTo(map).start();
+		el3.addTo(map).start();
+		el4.addTo(map).start();
+		el5.addTo(map).start();
+		el6.addTo(map).start();
+		el7.addTo(map).start();
+		
+		
+		// второй ввод
+		el23.addTo(map).start();
+		
+		el11.addTo(map).start();
+		el12.addTo(map).start();
+		el13.addTo(map).start();
+		el14.addTo(map).start();
+		el15.addTo(map).start();
+		el16.addTo(map).start();
+		el17.addTo(map).start();
+		
+		
+			
+		TopIcon=myIcon;
+		LeftIcon=myIconBlue;
+		
+		// выходы зел
+		el41.addTo(map).start();
+		el42.addTo(map).start();
+		el43.addTo(map).start();
+		el44.addTo(map).start();
+		el45.addTo(map).start();
+		el46.addTo(map).start();
+		el47.addTo(map).start();
+		
+		
+		// выходы синие
+		el51.addTo(map).start();
+		el52.addTo(map).start();
+		el53.addTo(map).start();
+		el54.addTo(map).start();
+		el55.addTo(map).start();
+		el56.addTo(map).start();
+		el57.addTo(map).start();
+	}
+	
+	
+	function Mode_2(){
+	
+		curMode=Mode_2;
+		SetObject("P2","GREEN","NO");
+		SetObject("P1","RED","NO");
+		
+		
+		SetObject("1AB","YELLOW","NO");
+		SetObject("2AB","GREEN","NO");
+		SetObject("3AB","GREEN","NO");
+		SetObject("4AB","BLUE","NO");
+		SetObject("5AB","BLUE","NO");
+		SetObject("6AB","BLUE","NO");
+		SetObject("7AB","YELLOW","NO");
+		
+		SetObject("ADES1","BLUE","NO");
+		SetObject("ADES2","BLUE","NO");
+		SetObject("ADES3","BLUE","NO");
+		
+		
+		SetObject("ABP1","GREEN","NO");
+		SetObject("ABP3","GREEN","NO");
+		SetObject("ABP4","GREEN","NO");
+		SetObject("ABP5","GREEN","NO");
+		SetObject("ABP6","GREEN","NO");
+		SetObject("ABP7","GREEN","NO");
+		SetObject("ABP8","GREEN","NO");
+		
+		SetObject("ABP1L","BLUE","NO");
+		SetObject("ABP3L","BLUE","NO");
+		SetObject("ABP4L","BLUE","NO");
+		SetObject("ABP5L","BLUE","NO");
+		SetObject("ABP6L","BLUE","NO");
+		SetObject("ABP7L","BLUE","NO");
+		SetObject("ABP8L","BLUE","NO");
+		
+		
+	
+		StopLines();
+		el22.addTo(map).start();
+		
+		el1.addTo(map).start();
+		el2.addTo(map).start();
+		el3.addTo(map).start();
+		el4.addTo(map).start();
+		el5.addTo(map).start();
+		el6.addTo(map).start();
+		el7.addTo(map).start();
+		
+		
+		
+		
+		el31.addTo(map).start();
+		el32.addTo(map).start();
+		el33.addTo(map).start();
+		
+		
+		el11.addTo(map).start();
+		el12.addTo(map).start();
+		el13.addTo(map).start();
+		el14.addTo(map).start();
+		el15.addTo(map).start();
+		el16.addTo(map).start();
+		el17.addTo(map).start();
+		
+			
+		TopIcon=myIcon;
+		LeftIcon=myIconBlue;
+		
+		// выходы зел
+		el41.addTo(map).start();
+		el42.addTo(map).start();
+		el43.addTo(map).start();
+		el44.addTo(map).start();
+		el45.addTo(map).start();
+		el46.addTo(map).start();
+		el47.addTo(map).start();
+		
+		
+		// выходы синие
+		el51.addTo(map).start();
+		el52.addTo(map).start();
+		el53.addTo(map).start();
+		el54.addTo(map).start();
+		el55.addTo(map).start();
+		el56.addTo(map).start();
+		el57.addTo(map).start();
+		
+		
+	}
+	
+
+	function Mode_3(){
+		curMode=Mode_3;
+		SetObject("P1","GREEN","NO");
+		SetObject("P2","RED","NO");
+		
+		SetObject("1AB","GREEN","NO");
+		SetObject("2AB","YELLOW","NO");
+		SetObject("3AB","YELLOW","NO");
+		SetObject("4AB","BLUE","NO");
+		SetObject("5AB","BLUE","NO");
+		SetObject("6AB","BLUE","NO");
+		SetObject("7AB","YELLOW","NO");
+		
+		SetObject("ADES1","BLUE","NO");
+		SetObject("ADES2","BLUE","NO");
+		SetObject("ADES3","BLUE","NO");
+		
+		
+		SetObject("ABP1","GREEN","NO");
+		SetObject("ABP3","GREEN","NO");
+		SetObject("ABP4","GREEN","NO");
+		SetObject("ABP5","GREEN","NO");
+		SetObject("ABP6","GREEN","NO");
+		SetObject("ABP7","GREEN","NO");
+		SetObject("ABP8","GREEN","NO");
+		
+		
+		SetObject("ABP1L","BLUE","NO");
+		SetObject("ABP3L","BLUE","NO");
+		SetObject("ABP4L","BLUE","NO");
+		SetObject("ABP5L","BLUE","NO");
+		SetObject("ABP6L","BLUE","NO");
+		SetObject("ABP7L","BLUE","NO");
+		SetObject("ABP8L","BLUE","NO");
+	
+		StopLines();
+		// первый ввод
+		el21.addTo(map).start();
+		
+		el1.addTo(map).start();
+		el2.addTo(map).start();
+		el3.addTo(map).start();
+		el4.addTo(map).start();
+		el5.addTo(map).start();
+		el6.addTo(map).start();
+		el7.addTo(map).start();
+		
+		// дизеля
+		el31.addTo(map).start();
+		el32.addTo(map).start();
+		el33.addTo(map).start();
+		
+		
+		el11.addTo(map).start();
+		el12.addTo(map).start();
+		el13.addTo(map).start();
+		el14.addTo(map).start();
+		el15.addTo(map).start();
+		el16.addTo(map).start();
+		el17.addTo(map).start();
+		
+		
+		TopIcon=myIcon;
+		LeftIcon=myIconBlue;
+		
+		// выходы зел
+		el41.addTo(map).start();
+		el42.addTo(map).start();
+		el43.addTo(map).start();
+		el44.addTo(map).start();
+		el45.addTo(map).start();
+		el46.addTo(map).start();
+		el47.addTo(map).start();
+		
+		
+		// выходы синие
+		el51.addTo(map).start();
+		el52.addTo(map).start();
+		el53.addTo(map).start();
+		el54.addTo(map).start();
+		el55.addTo(map).start();
+		el56.addTo(map).start();
+		el57.addTo(map).start();
+		
+		
+	}
+	
+	function Mode_4(){
+		curMode=Mode_4;
+		SetObject("P2","RED","NO");
+		SetObject("P1","RED","NO");
+		
+		
+		SetObject("1AB","YELLOW","NO");
+		SetObject("2AB","YELLOW","NO");
+		SetObject("3AB","YELLOW","NO");
+		SetObject("4AB","BLUE","NO");
+		SetObject("5AB","BLUE","NO");
+		SetObject("6AB","BLUE","NO");
+		SetObject("7AB","YELLOW","NO");
+		
+		SetObject("ADES1","BLUE","NO");
+		SetObject("ADES2","BLUE","NO");
+		SetObject("ADES3","BLUE","NO");
+		
+		SetObject("ABP1","RED","NO");
+		SetObject("ABP3","RED","NO");
+		SetObject("ABP4","RED","NO");
+		SetObject("ABP5","RED","NO");
+		SetObject("ABP6","RED","NO");
+		SetObject("ABP7","RED","NO");
+		SetObject("ABP8","RED","NO");
+		
+		SetObject("ABP1L","BLUE","NO");
+		SetObject("ABP3L","BLUE","NO");
+		SetObject("ABP4L","BLUE","NO");
+		SetObject("ABP5L","BLUE","NO");
+		SetObject("ABP6L","BLUE","NO");
+		SetObject("ABP7L","BLUE","NO");
+		SetObject("ABP8L","BLUE","NO");
+	
+		StopLines();
+		el11.addTo(map).start();
+		el12.addTo(map).start();
+		el13.addTo(map).start();
+		el14.addTo(map).start();
+		el15.addTo(map).start();
+		el16.addTo(map).start();
+		el17.addTo(map).start();
+		
+		
+		el31.addTo(map).start();
+		el32.addTo(map).start();
+		el33.addTo(map).start();
+		
+		// выходы зел
+		TopIcon=myIconBlue;
+		LeftIcon=myIconBlue;
+		
+		el41.addTo(map).start();
+		el42.addTo(map).start();
+		el43.addTo(map).start();
+		el44.addTo(map).start();
+		el45.addTo(map).start();
+		el46.addTo(map).start();
+		el47.addTo(map).start();
+		
+		
+		
+		// выходы синие
+		el51.addTo(map).start();
+		el52.addTo(map).start();
+		el53.addTo(map).start();
+		el54.addTo(map).start();
+		el55.addTo(map).start();
+		el56.addTo(map).start();
+		el57.addTo(map).start();
+		
+		
+	}
+	
+	
+	function Mode_5(){
+		curMode=Mode_5;
+	
+		SetObject("P1","GREEN","NO");
+		SetObject("P2","RED","NO");
+		
+		
+		SetObject("1AB","GREEN","NO");
+		SetObject("2AB","YELLOW","NO");
+		SetObject("3AB","YELLOW","NO");
+		SetObject("4AB","YELLOW","NO");
+		SetObject("5AB","YELLOW","NO");
+		SetObject("6AB","YELLOW","NO");
+		SetObject("7AB","YELLOW","NO");
+		
+		SetObject("ADES1","RED","NO");
+		SetObject("ADES2","RED","NO");
+		SetObject("ADES3","RED","NO");
+		
+		SetObject("ABP1","GREEN","NO");
+		SetObject("ABP3","GREEN","NO");
+		SetObject("ABP4","GREEN","NO");
+		SetObject("ABP5","GREEN","NO");
+		SetObject("ABP6","GREEN","NO");
+		SetObject("ABP7","GREEN","NO");
+		SetObject("ABP8","GREEN","NO");
+		
+			
+		SetObject("ABP1L","RED","NO");
+		SetObject("ABP3L","RED","NO");
+		SetObject("ABP4L","RED","NO");
+		SetObject("ABP5L","RED","NO");
+		SetObject("ABP6L","RED","NO");
+		SetObject("ABP7L","RED","NO");
+		SetObject("ABP8L","RED","NO");
+	
+		StopLines();
+		// первый ввод
+		el21.addTo(map).start();
+		
+		el1.addTo(map).start();
+		el2.addTo(map).start();
+		el3.addTo(map).start();
+		el4.addTo(map).start();
+		el5.addTo(map).start();
+		el6.addTo(map).start();
+		el7.addTo(map).start();
+		
+		
+		
+		
+			
+		TopIcon=myIcon;
+		LeftIcon=myIcon;
+		
+		// выходы зел
+		el41.addTo(map).start();
+		el42.addTo(map).start();
+		el43.addTo(map).start();
+		el44.addTo(map).start();
+		el45.addTo(map).start();
+		el46.addTo(map).start();
+		el47.addTo(map).start();
+		
+		
+		// выходы синие
+		el51.addTo(map).start();
+		el52.addTo(map).start();
+		el53.addTo(map).start();
+		el54.addTo(map).start();
+		el55.addTo(map).start();
+		el56.addTo(map).start();
+		el57.addTo(map).start();
+	}
+	
+	
+	function Mode_6(){
+	
+		curMode=Mode_6;
+		
+		SetObject("P2","GREEN","NO");
+		SetObject("P1","RED","NO");
+		
+		
+		SetObject("1AB","YELLOW","NO");
+		SetObject("2AB","GREEN","NO");
+		SetObject("3AB","GREEN","NO");
+		SetObject("4AB","YELLOW","NO");
+		SetObject("5AB","YELLOW","NO");
+		SetObject("6AB","YELLOW","NO");
+		SetObject("7AB","YELLOW","NO");
+		
+		SetObject("ADES1","RED","NO");
+		SetObject("ADES2","RED","NO");
+		SetObject("ADES3","RED","NO");
+		
+		
+		SetObject("ABP1","GREEN","NO");
+		SetObject("ABP3","GREEN","NO");
+		SetObject("ABP4","GREEN","NO");
+		SetObject("ABP5","GREEN","NO");
+		SetObject("ABP6","GREEN","NO");
+		SetObject("ABP7","GREEN","NO");
+		SetObject("ABP8","GREEN","NO");
+		
+		SetObject("ABP1L","RED","NO");
+		SetObject("ABP3L","RED","NO");
+		SetObject("ABP4L","RED","NO");
+		SetObject("ABP5L","RED","NO");
+		SetObject("ABP6L","RED","NO");
+		SetObject("ABP7L","RED","NO");
+		SetObject("ABP8L","RED","NO");
+		
+		
+	
+		StopLines();
+		el22.addTo(map).start();
+		
+		el1.addTo(map).start();
+		el2.addTo(map).start();
+		el3.addTo(map).start();
+		el4.addTo(map).start();
+		el5.addTo(map).start();
+		el6.addTo(map).start();
+		el7.addTo(map).start();
+		
+
+		
+			
+		TopIcon=myIcon;
+		LeftIcon=myIcon;
+		
+		// выходы зел
+		el41.addTo(map).start();
+		el42.addTo(map).start();
+		el43.addTo(map).start();
+		el44.addTo(map).start();
+		el45.addTo(map).start();
+		el46.addTo(map).start();
+		el47.addTo(map).start();
+		
+		
+		// выходы синие
+		el51.addTo(map).start();
+		el52.addTo(map).start();
+		el53.addTo(map).start();
+		el54.addTo(map).start();
+		el55.addTo(map).start();
+		el56.addTo(map).start();
+		el57.addTo(map).start();
+		
+		
+	}
+	
+	
+	
+	Mode_1();
+	
+	function SetObject(ID,COLOR,BLINK){
+	
+		
+		var ok = false;
+		var rect;
+		var j;
+		for (j = 0; j < myObjects.length; j++) {
+			if (myObjects[j].tag == ID) {
+				ok = true;
+				rect = myObjects[j];
+				break;
+			}
+		}
+
+		if (ok) {
+			if(BLINK=='YES'){
+				blink=true;
+			}else{
+				blink=false;
+			}
+		
+			switch (COLOR) {
+				case 'GREEN':
+					 rgb = '#00FF00'; // green
+					break;
+				case 'YELLOW':
+					rgb = '#dddd00';
+					break;
+				case 'RED':
+					 rgb = '#FF0000'; //red
+					break;
+				case 'BLUE':
+					 rgb = '#0000FF'; //blue
+					break;	
+				default:
+					rgb = '#000000'; //black
+					break;
+			}
+			rect.setStyle({ color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 1 });
+
+			rect.on('contextmenu',function(event){ }); 
+			rect.blink = blink;
+		}
+					
+	}
+	
+	function OnResize(){
+		curMode();
+	}
+	
+	 map.on('zoomend', OnResize, map);
+	 
+	 map.on('zoomstart', StopLines, map);
+	
+    function ReloadData() {
+
+            function OnRequestReady(data) {
+
+                $.each(data.data, function (i, v) {
+                    var ok = false;
+                    var rect;
+                    var j;
+                    for (j = 0; j < myObjects.length; j++) {
+                        if (myObjects[j].tag == v.ID) {
+                            ok = true;
+                            rect = myObjects[j];
+                            break;
+                        }
+                    }
+
+                    if (ok) {
+						if(v.BLINK=='YES'){
+							blink=true;
+						}else{
+							blink=false;
+						}
+					
+						switch (v.COLOR) {
+							case 'GREEN':
+								 rgb = '#00FF00'; // green
+								break;
+							case 'YELLOW':
+								rgb = '#dddd00';
+								break;
+							case 'RED':
+								 rgb = '#FF0000'; //red
+								break;
+							case 'BLUE':
+								 rgb = '#0000FF'; //blue
+								break;	
+							default:
+								rgb = '#000000'; //black
+								break;
+						}
+                        rect.setStyle({ color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 1 });
+                       // //rect.bindPopup(sPopup);
+                       // rect.marker.bindPopup(sPopup);
+                        rect.on('contextmenu',function(event){ }); 
+						rect.blink = blink;
+					}
+					
+					if(v.INFO !=null){
+						var item=document.getElementById('v' +v.ID);
+						if( item!=null){
+							item.innerHTML =v.INFO;
+						}else{
+							console.log(v.ID);
+						}
+					}
+                    
+                });
+
+
+            };
+        
+		$.ajax({
+                dataType: "json",
+                url: 'sinop1.aspx',
+                success: OnRequestReady
+            });
+
+        }
+        var blinkMode = false;
+        function Blinker() {
+            blinkMode = !blinkMode;
+            var j;
+            for (j = 0; j < myObjects.length; j++) {
+
+                rect = myObjects[j];
+                if (rect.blink == true) {
+                    if (blinkMode) {
+                        rect.setStyle({  fillOpacity: 0.1 });
+                    } else {
+                        rect.setStyle({  fillOpacity: 0.5 });
+                    }
+                }
+               
+            }
+           
+
+        }
+
+        ReloadData();
+
+		var intervalID = window.setInterval(ReloadData, 2000);   
+
+		var intervalID2 = window.setInterval(Blinker, 500);   
+   
+
+</script>
+ 
+</body>
+</html>
