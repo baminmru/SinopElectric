@@ -116,7 +116,12 @@
 	<li><a href="#" onclick='Mode_4();'>Только Дизеля</a></li>
 	<li><a href="#" onclick='Mode_5();'>Только Ввод 1</a></li>
 	<li><a href="#" onclick='Mode_6();'>Только Ввод 2</a></li>
+	</ul>
 	
+	<h3> Опции вывода</h3>
+	<ul>
+	<li><a href="#" onclick='flipAnimation();'>Анимация</a></li>
+	<li><a href="#" onclick='flipPoly();'>Подсветка соединений</a></li>
 	</ul>
 	
 	</div>
@@ -125,7 +130,21 @@
 
 	var imgW=1898;
 	var imgH=1364;
-	var lineSpeed=500000;
+	var lineSpeed=250000;
+	var cfgUseAnimation = true;
+	var cfgUseLines =true;
+	
+	
+	function flipAnimation(){
+		cfgUseAnimation = !cfgUseAnimation;
+		curMode();
+	}
+	
+	function flipPoly(){
+		cfgUseLines= !cfgUseLines;
+		curMode();
+	}
+
 
 	var imageUrl = './images/sinop1.png', imageBounds = [[-imgH/20, -imgW/20], [imgH/20, imgW/20]];
 	
@@ -270,19 +289,21 @@
 	
 	var myLines=[];
 	var myObjects =[];
+	var myPolyLines =[];
+	
 	var blink=true;
 	  
-	    function MapX(X) {
-            var mx = parseInt(X);
-            mx = mx / 10 -imgW/20;
-            return mx;
-        }
+	function MapX(X) {
+		var mx = parseInt(X);
+		mx = mx / 10 -imgW/20;
+		return mx;
+	}
 
-        function MapY(Y) {
-            var my = parseInt(Y);
-            my =  imgH/20 - my / 10;
-            return my;
-        }
+	function MapY(Y) {
+		var my = parseInt(Y);
+		my =  imgH/20 - my / 10;
+		return my;
+	}
 	
 	var rect;
 	var bounds;
@@ -290,7 +311,9 @@
 	var marker;
 
 	
-
+	// объекты
+	
+	//  переключатели
 	bounds=FlipLL([[-24.082031250000004,34.161818161230386],[-24.082031250000004,40.51379915504413],[-15.029296875000002,40.51379915504413],[-15.029296875000002,34.161818161230386],[-24.082031250000004,34.161818161230386]]);
 	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
 	rect.tag = '1AB';
@@ -328,10 +351,7 @@
     rect.blink = blink;
 	myObjects.push(rect);
 	rect.addTo(map);
-	
-	
-	
-	
+
 	
 	bounds=FlipLL([[34.80468750000001,26.667095801104814],[34.80468750000001,32.84267363195431],[43.59375000000001,32.84267363195431],[43.59375000000001,26.667095801104814],[34.80468750000001,26.667095801104814]]);
 	rect = L.polygon(bounds, {  color: rgb, opacity: 1.0, fillOpacity: 0.5, weight: 2 });
@@ -343,9 +363,6 @@
     rect.blink = blink;
 	myObjects.push(rect);
 	rect.addTo(map);
-	
-	
-	
 	
 	
 	bounds=FlipLL([[53.70117187500001,26.509904531413927],[53.70117187500001,32.7688004848817],[62.75390625000001,32.7688004848817],[62.75390625000001,26.509904531413927],[53.70117187500001,26.509904531413927]]);
@@ -385,11 +402,7 @@
     rect.blink = blink;
 	myObjects.push(rect);
 	rect.addTo(map);
-	
-		
-	
-	
-	
+
 	
 	
 	// подключение  сверху
@@ -418,6 +431,9 @@
 	myLines.push(el1);
 	
 	
+	var pl_1  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_1);
+	
 	
 	bounds=FlipLL([[-68.20312500000001,8.059229627200192],[-68.37890625000001,-32.546813173515154]]);
 	var el2 = L.animatedMarker(bounds, {
@@ -443,7 +459,12 @@
     map.addLayer(el2);
 	myLines.push(el2);
 	
+	var pl_2  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_2);
+	
+	
 		
+	
 	bounds=FlipLL([[-51.15234375,7.710991655433217],[-51.32812500000001,-40.4469470596005]]);
 	var el3 = L.animatedMarker(bounds, {
       icon: myIcon,
@@ -468,8 +489,11 @@
     map.addLayer(el3);
 	myLines.push(el3);
 	
+	var pl_3  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_3);
+	
 		
-	bounds=FlipLL([[-42.36328125000001,7.710991655433217],[-42.36328125000001,-22.59372606392931],[-37.79296875000001,-22.91792293614603],[-37.61718750000001,-47.8721439688873]]);
+	bounds=FlipLL([[-42.36328125000001,7.710991655433217],[-42.36328125000001,-22.59372606392931],[-37.79296875000001,-22.59372606392931],[-37.79296875000001,-47.8721439688873]]);
 	var el4 = L.animatedMarker(bounds, {
       icon: myIcon,
       autoStart: false,
@@ -493,9 +517,12 @@
     map.addLayer(el4);
 	myLines.push(el4);
 	
+	var pl_4  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_4);
+	
 	
 		
-	bounds=FlipLL([[-35.50781250000001,7.536764322084078],[-34.98046875000001,-20.3034175184893],[-20.742187500000004,-21.12549763660628],[-20.742187500000004,-53.748710796898976]]);
+	bounds=FlipLL([[-35.50781250000001,7.536764322084078],[-34.98046875000001,-20.3034175184893],[-20.742187500000004,-20.3034175184893],[-20.742187500000004,-53.748710796898976]]);
 	var el5 = L.animatedMarker(bounds, {
       icon: myIcon,
       autoStart: false,
@@ -518,6 +545,9 @@
     });
     map.addLayer(el5);
 	myLines.push(el5);
+	
+	var pl_5  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_5);
 	
 		
 	bounds=FlipLL([[-27.949218750000004,7.885147283424331],[-27.773437500000004,-15.961329081596647],[-1.40625,-15.961329081596647],[-1.0546875000000002,-59.265880628258095]]);
@@ -544,6 +574,9 @@
     map.addLayer(el6);
 	myLines.push(el6);
 	
+	var pl_6  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_6);
+	
 	
 		
 	bounds=FlipLL([[-22.148437500000004,7.18810087117902],[-21.972656250000004,-13.2399454992863],[18.984375000000004,-13.2399454992863],[19.16015625,-64.01449619484472]]);
@@ -569,6 +602,9 @@
     });
     map.addLayer(el7);
 	myLines.push(el7);
+	
+	var pl_7  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_7);
 	
 	
 	
@@ -597,6 +633,9 @@
     map.addLayer(el11);
 	myLines.push(el11);
 	
+	var pl_11  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_11);
+	
 	
 	bounds=FlipLL([[89.82421875000001,-35.460669951495305],[-58.53515625000001,-35.460669951495305]]);
 	var el12 = L.animatedMarker(bounds, {
@@ -622,7 +661,8 @@
     map.addLayer(el12);
 	myLines.push(el12);
 	
-	
+	var pl_12  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_12);
 		
 	bounds=FlipLL([[89.82421875000001,-43.197167282501276],[-40.95703125000001,-43.06888777416962]]);
 	var el13 = L.animatedMarker(bounds, {
@@ -647,6 +687,9 @@
     });
     map.addLayer(el13);
 	myLines.push(el13);
+	
+	var pl_13  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_13);
 	
 	
 		
@@ -674,6 +717,9 @@
     map.addLayer(el14);
 	myLines.push(el14);
 	
+	var pl_14  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_14);
+	
 	
 		
 	bounds=FlipLL([[89.82421875000001,-55.47885346331034],[-7.910156250000001,-55.57834467218206]]);
@@ -700,6 +746,9 @@
     map.addLayer(el15);
 	myLines.push(el15);
 	
+	var pl_15  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_15);
+	
 		
 	bounds=FlipLL([[90.35156250000001,-61.18562468142282],[8.789062500000002,-61.43876749368282]]);
 	var el16 = L.animatedMarker(bounds, {
@@ -724,6 +773,9 @@
     });
     map.addLayer(el16);
 	myLines.push(el16);
+	
+	var pl_16  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_16);
 	
 	
 		
@@ -752,6 +804,9 @@
 	myLines.push(el17);
 	
 	
+	var pl_17  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_17);
+	
 	// Варианты подачи  энергии
 	
 	bounds=FlipLL([[-15.996093750000002,63.470144746565445],[-16.347656250000004,7.885147283424331],[-89.12109375000001,8.059229627200192]]);
@@ -778,6 +833,9 @@
     map.addLayer(el21);
 	myLines.push(el21);
 	
+	var pl_21  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_21);
+	
 	
 	bounds=FlipLL([[15.292968750000002,64.0914075226231],[15.292968750000002,7.710991655433217],[-88.59375000000001,8.059229627200192]]);
 	var el22 = L.animatedMarker(bounds, {
@@ -802,6 +860,9 @@
     });
     map.addLayer(el22);
 	myLines.push(el22);
+	
+	var pl_22  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_22);
 	
 	
 	bounds=FlipLL([[15.468750000000002,63.39152174400885],[14.941406250000002,7.885147283424331],[91.58203125000001,7.536764322084078],[91.7578125,-66.51326044311186]]);
@@ -828,9 +889,12 @@
     map.addLayer(el23);
 	myLines.push(el23);
 	
+	var pl_23  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_23);
+	
 	// дизеля
 	
-	bounds=FlipLL([[42.36328125000001,51.72702815704777],[42.36328125000001,7.885147283424331],[92.10937500000001,7.536764322084078],[91.40625000000001,-65.94647177615738]]);
+	bounds=FlipLL([[42.36328125000001,51.72702815704777],[42.36328125000001,7.885147283424331],[92.10937500000001,7.536764322084078],[92.10937500000001,-65.94647177615738]]);
 	var el31 = L.animatedMarker(bounds, {
       icon: myIconBlue,
       autoStart: false,
@@ -854,8 +918,11 @@
     map.addLayer(el31);
 	myLines.push(el31);
 	
+	var pl_31  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_31);
 	
-	bounds=FlipLL([[61.69921875000001,51.50874245880335],[62.05078125000001,8.059229627200192],[92.4609375,7.18810087117902],[92.10937500000001,-66.51326044311186]]);
+	
+	bounds=FlipLL([[61.69921875000001,51.50874245880335],[62.05078125000001,8.059229627200192],[92.10937500000001,7.536764322084078],[92.10937500000001,-65.94647177615738]]);
 	var el32 = L.animatedMarker(bounds, {
       icon: myIconBlue,
       autoStart: false,
@@ -879,8 +946,11 @@
     map.addLayer(el32);
 	myLines.push(el32);
 	
+	var pl_32  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_32);
 	
-	bounds=FlipLL([[82.61718750000001,51.39920565355378],[82.96875000000001,7.710991655433217],[92.10937500000001,7.013667927566642],[91.40625000000001,-65.94647177615738]]);
+	
+	bounds=FlipLL([[82.61718750000001,51.39920565355378],[82.96875000000001,7.710991655433217],[92.10937500000001,7.536764322084078],[92.10937500000001,-65.94647177615738]]);
 	var el33 = L.animatedMarker(bounds, {
       icon: myIconBlue,
       autoStart: false,
@@ -903,6 +973,9 @@
     });
     map.addLayer(el33);
 	myLines.push(el33);
+	
+	var pl_33  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_33);
 	
 	
 	var TopIcon = myIcon;
@@ -933,6 +1006,9 @@
     map.addLayer(el41);
 	myLines.push(el41);
 	
+	var pl_41  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_41);
+	
 	
 	bounds=FlipLL([[-68.02734375000001,-40.58058466412763],[-68.20312500000001,-49.15296965617039]]);
 	var el42 = L.animatedMarker(bounds, {
@@ -958,6 +1034,9 @@
     map.addLayer(el42);
 	myLines.push(el42);
 	
+	var pl_42  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_42);
+	
 	bounds=FlipLL([[-51.50390625000001,-47.63578359086485],[-51.32812500000001,-54.97761367069625]]);
 	var el43 = L.animatedMarker(bounds, {
       icon: TopIcon,
@@ -981,6 +1060,9 @@
     });
     map.addLayer(el43);
 	myLines.push(el43);
+	
+	var pl_43  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_43);
 	
 	bounds=FlipLL([[-34.80468750000001,-53.85252660044952],[-34.80468750000001,-60.58696734225869]]);
 	var el44 = L.animatedMarker(bounds, {
@@ -1006,6 +1088,9 @@
     map.addLayer(el44);
 	myLines.push(el44);
 	
+	var pl_44  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_44);
+	
 	bounds=FlipLL([[-18.632812500000004,-59.355596110016315],[-18.632812500000004,-63.704722429433225]]);
 	var el45 = L.animatedMarker(bounds, {
       icon: TopIcon,
@@ -1029,6 +1114,9 @@
     });
     map.addLayer(el45);
 	myLines.push(el45);
+	
+	var pl_45  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_45);
 	
 	
 	
@@ -1058,6 +1146,9 @@
     map.addLayer(el46);
 	myLines.push(el46);
 	
+	var pl_46  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_46);
+	
 	
 	bounds=FlipLL([[11.953125000000002,-65.18303007291381],[7.822265625000001,-65.21989393613208]]);
 	var el47 = L.animatedMarker(bounds, {
@@ -1082,6 +1173,9 @@
     });
     map.addLayer(el47);
 	myLines.push(el47);
+	
+	var pl_47  = L.polyline(bounds, {width:6, opacity:0.75, color: 'green', dashArray:'5,5'});
+	myPolyLines.push(pl_47);
 	
 	
 	
@@ -1110,6 +1204,9 @@
     map.addLayer(el51);
 	myLines.push(el51);
 	
+	var pl_51  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_51);
+	
 	
 	bounds=FlipLL([[-63.10546875000001,-40.58058466412763],[-63.19335937500001,-49.21042044565029]]);
 	var el52 = L.animatedMarker(bounds, {
@@ -1135,6 +1232,10 @@
     map.addLayer(el52);
 	myLines.push(el52);
 	
+	var pl_52  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_52);
+	
+	
 	bounds=FlipLL([[-45.79101562500001,-47.576525713746214],[-45.87890625,-55.27911529201562]]);
 	var el53 = L.animatedMarker(bounds, {
       icon: LeftIcon,
@@ -1158,6 +1259,10 @@
     });
     map.addLayer(el53);
 	myLines.push(el53);
+	
+	var pl_53  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_53);
+	
 	
 	bounds=FlipLL([[-29.355468750000004,-53.80065082633022],[-29.443359375000004,-60.413852350464914]]);
 	var el54 = L.animatedMarker(bounds, {
@@ -1183,6 +1288,10 @@
     map.addLayer(el54);
 	myLines.push(el54);
 	
+	var pl_54  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_54);
+	
+	
 	bounds=FlipLL([[-13.359375000000002,-59.17592824927136],[-13.359375000000002,-63.66576033778838]]);
 	var el55 = L.animatedMarker(bounds, {
       icon: LeftIcon,
@@ -1206,6 +1315,10 @@
     });
     map.addLayer(el55);
 	myLines.push(el55);
+	
+	var pl_55  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_55);
+	
 	
 	
 	
@@ -1234,6 +1347,10 @@
     map.addLayer(el56);
 	myLines.push(el56);
 	
+	var pl_56  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_56);
+	
+	
 	
 	bounds=FlipLL([[12.041015625000002,-67.03316279015063],[7.822265625000001,-67.03316279015063]]);
 	var el57 = L.animatedMarker(bounds, {
@@ -1259,6 +1376,9 @@
     map.addLayer(el57);
 	myLines.push(el57);
 	
+	
+	var pl_57  = L.polyline(bounds, {width:6, opacity:0.75, color: 'blue', dashArray:'5,5'});
+	myPolyLines.push(pl_57);
 	
 	
 	
@@ -1555,6 +1675,10 @@
 		for (j = 0; j < myLines.length; j++) {
 			map.removeLayer(myLines[j]);
         }
+		
+		for (j = 0; j < myPolyLines.length; j++) {
+			map.removeLayer(myPolyLines[j]);
+        }
 	}
 
 	var curMode=StopLines;
@@ -1595,52 +1719,102 @@
 		SetObject("ABP8L","BLUE","NO");
 	
 		StopLines();
-		// первый ввод
-		el21.addTo(map).start();
 		
-		el1.addTo(map).start();
-		el2.addTo(map).start();
-		el3.addTo(map).start();
-		el4.addTo(map).start();
-		el5.addTo(map).start();
-		el6.addTo(map).start();
-		el7.addTo(map).start();
-		
-		
-		// второй ввод
-		el23.addTo(map).start();
-		
-		el11.addTo(map).start();
-		el12.addTo(map).start();
-		el13.addTo(map).start();
-		el14.addTo(map).start();
-		el15.addTo(map).start();
-		el16.addTo(map).start();
-		el17.addTo(map).start();
-		
-		
+		if(cfgUseAnimation){
+			// первый ввод
+			el21.addTo(map).start();
 			
-		TopIcon=myIcon;
-		LeftIcon=myIconBlue;
+			el1.addTo(map).start();
+			el2.addTo(map).start();
+			el3.addTo(map).start();
+			el4.addTo(map).start();
+			el5.addTo(map).start();
+			el6.addTo(map).start();
+			el7.addTo(map).start();
+			
+			
+			// второй ввод
+			el23.addTo(map).start();
+			
+			el11.addTo(map).start();
+			el12.addTo(map).start();
+			el13.addTo(map).start();
+			el14.addTo(map).start();
+			el15.addTo(map).start();
+			el16.addTo(map).start();
+			el17.addTo(map).start();
+			
+			
+				
+			TopIcon=myIcon;
+			LeftIcon=myIconBlue;
+			
+			// выходы зел
+			el41.addTo(map).start();
+			el42.addTo(map).start();
+			el43.addTo(map).start();
+			el44.addTo(map).start();
+			el45.addTo(map).start();
+			el46.addTo(map).start();
+			el47.addTo(map).start();
+			
+			
+			// выходы синие
+			el51.addTo(map).start();
+			el52.addTo(map).start();
+			el53.addTo(map).start();
+			el54.addTo(map).start();
+			el55.addTo(map).start();
+			el56.addTo(map).start();
+			el57.addTo(map).start();
+		}
 		
-		// выходы зел
-		el41.addTo(map).start();
-		el42.addTo(map).start();
-		el43.addTo(map).start();
-		el44.addTo(map).start();
-		el45.addTo(map).start();
-		el46.addTo(map).start();
-		el47.addTo(map).start();
+		if(cfgUseLines){
+			////////////////
+			// первый ввод
+			pl_21.addTo(map);
+			
+			pl_1.addTo(map);
+			pl_2.addTo(map);
+			pl_3.addTo(map);
+			pl_4.addTo(map);
+			pl_5.addTo(map);
+			pl_6.addTo(map);
+			pl_7.addTo(map);
+			
+			
+			// второй ввод
+			pl_23.addTo(map);
+			
+			pl_11.addTo(map);
+			pl_12.addTo(map);
+			pl_13.addTo(map);
+			pl_14.addTo(map);
+			pl_15.addTo(map);
+			pl_16.addTo(map);
+			pl_17.addTo(map);
+
+			
+			// выходы зел
+			pl_41.addTo(map).setStyle({color:'green'});
+			pl_42.addTo(map).setStyle({color:'green'});
+			pl_43.addTo(map).setStyle({color:'green'});
+			pl_44.addTo(map).setStyle({color:'green'});
+			pl_45.addTo(map).setStyle({color:'green'});
+			pl_46.addTo(map).setStyle({color:'green'});
+			pl_47.addTo(map).setStyle({color:'green'});
+			
+			
+			// выходы синие
+			pl_51.addTo(map).setStyle({color:'blue'});
+			pl_52.addTo(map).setStyle({color:'blue'});
+			pl_53.addTo(map).setStyle({color:'blue'});
+			pl_54.addTo(map).setStyle({color:'blue'});
+			pl_55.addTo(map).setStyle({color:'blue'});
+			pl_56.addTo(map).setStyle({color:'blue'});
+			pl_57.addTo(map).setStyle({color:'blue'});
+		}
 		
-		
-		// выходы синие
-		el51.addTo(map).start();
-		el52.addTo(map).start();
-		el53.addTo(map).start();
-		el54.addTo(map).start();
-		el55.addTo(map).start();
-		el56.addTo(map).start();
-		el57.addTo(map).start();
 	}
 	
 	
@@ -1683,55 +1857,109 @@
 		
 	
 		StopLines();
-		el22.addTo(map).start();
 		
-		el1.addTo(map).start();
-		el2.addTo(map).start();
-		el3.addTo(map).start();
-		el4.addTo(map).start();
-		el5.addTo(map).start();
-		el6.addTo(map).start();
-		el7.addTo(map).start();
-		
-		
-		
-		
-		el31.addTo(map).start();
-		el32.addTo(map).start();
-		el33.addTo(map).start();
-		
-		
-		el11.addTo(map).start();
-		el12.addTo(map).start();
-		el13.addTo(map).start();
-		el14.addTo(map).start();
-		el15.addTo(map).start();
-		el16.addTo(map).start();
-		el17.addTo(map).start();
-		
+		if(cfgUseAnimation){
+			el22.addTo(map).start();
 			
-		TopIcon=myIcon;
-		LeftIcon=myIconBlue;
+			el1.addTo(map).start();
+			el2.addTo(map).start();
+			el3.addTo(map).start();
+			el4.addTo(map).start();
+			el5.addTo(map).start();
+			el6.addTo(map).start();
+			el7.addTo(map).start();
+			
+			
+			
+			
+			el31.addTo(map).start();
+			el32.addTo(map).start();
+			el33.addTo(map).start();
+			
+			
+			el11.addTo(map).start();
+			el12.addTo(map).start();
+			el13.addTo(map).start();
+			el14.addTo(map).start();
+			el15.addTo(map).start();
+			el16.addTo(map).start();
+			el17.addTo(map).start();
+			
+				
+			TopIcon=myIcon;
+			LeftIcon=myIconBlue;
+			
+			// выходы зел
+			el41.addTo(map).start();
+			el42.addTo(map).start();
+			el43.addTo(map).start();
+			el44.addTo(map).start();
+			el45.addTo(map).start();
+			el46.addTo(map).start();
+			el47.addTo(map).start();
+			
+			
+			// выходы синие
+			el51.addTo(map).start();
+			el52.addTo(map).start();
+			el53.addTo(map).start();
+			el54.addTo(map).start();
+			el55.addTo(map).start();
+			el56.addTo(map).start();
+			el57.addTo(map).start();
+		}
 		
-		// выходы зел
-		el41.addTo(map).start();
-		el42.addTo(map).start();
-		el43.addTo(map).start();
-		el44.addTo(map).start();
-		el45.addTo(map).start();
-		el46.addTo(map).start();
-		el47.addTo(map).start();
+		
+		if(cfgUseLines){
+			///////////////////////
+			pl_22.addTo(map);
+			
+			pl_1.addTo(map);
+			pl_2.addTo(map);
+			pl_3.addTo(map);
+			pl_4.addTo(map);
+			pl_5.addTo(map);
+			pl_6.addTo(map);
+			pl_7.addTo(map);
+			
+			
+			
+			
+			pl_31.addTo(map);
+			pl_32.addTo(map);
+			pl_33.addTo(map);
+			
+			
+			pl_11.addTo(map);
+			pl_12.addTo(map);
+			pl_13.addTo(map);
+			pl_14.addTo(map);
+			pl_15.addTo(map);
+			pl_16.addTo(map);
+			pl_17.addTo(map);
+			
+			
+			// выходы зел
+			pl_41.addTo(map).setStyle({color:'green'});
+			pl_42.addTo(map).setStyle({color:'green'});
+			pl_43.addTo(map).setStyle({color:'green'});
+			pl_44.addTo(map).setStyle({color:'green'});
+			pl_45.addTo(map).setStyle({color:'green'});
+			pl_46.addTo(map).setStyle({color:'green'});
+			pl_47.addTo(map).setStyle({color:'green'});
+			
+			
+			// выходы синие
+			pl_51.addTo(map).setStyle({color:'blue'});
+			pl_52.addTo(map).setStyle({color:'blue'});
+			pl_53.addTo(map).setStyle({color:'blue'});
+			pl_54.addTo(map).setStyle({color:'blue'});
+			pl_55.addTo(map).setStyle({color:'blue'});
+			pl_56.addTo(map).setStyle({color:'blue'});
+			pl_57.addTo(map).setStyle({color:'blue'});
 		
 		
-		// выходы синие
-		el51.addTo(map).start();
-		el52.addTo(map).start();
-		el53.addTo(map).start();
-		el54.addTo(map).start();
-		el55.addTo(map).start();
-		el56.addTo(map).start();
-		el57.addTo(map).start();
-		
+		}
 		
 	}
 	
@@ -1772,53 +2000,105 @@
 		SetObject("ABP8L","BLUE","NO");
 	
 		StopLines();
-		// первый ввод
-		el21.addTo(map).start();
 		
-		el1.addTo(map).start();
-		el2.addTo(map).start();
-		el3.addTo(map).start();
-		el4.addTo(map).start();
-		el5.addTo(map).start();
-		el6.addTo(map).start();
-		el7.addTo(map).start();
+		if(cfgUseAnimation){
+			// первый ввод
+			el21.addTo(map).start();
+			
+			el1.addTo(map).start();
+			el2.addTo(map).start();
+			el3.addTo(map).start();
+			el4.addTo(map).start();
+			el5.addTo(map).start();
+			el6.addTo(map).start();
+			el7.addTo(map).start();
+			
+			// дизеля
+			el31.addTo(map).start();
+			el32.addTo(map).start();
+			el33.addTo(map).start();
+			
+			
+			el11.addTo(map).start();
+			el12.addTo(map).start();
+			el13.addTo(map).start();
+			el14.addTo(map).start();
+			el15.addTo(map).start();
+			el16.addTo(map).start();
+			el17.addTo(map).start();
+			
+			
+			TopIcon=myIcon;
+			LeftIcon=myIconBlue;
+			
+			// выходы зел
+			el41.addTo(map).start();
+			el42.addTo(map).start();
+			el43.addTo(map).start();
+			el44.addTo(map).start();
+			el45.addTo(map).start();
+			el46.addTo(map).start();
+			el47.addTo(map).start();
+			
+			
+			// выходы синие
+			el51.addTo(map).start();
+			el52.addTo(map).start();
+			el53.addTo(map).start();
+			el54.addTo(map).start();
+			el55.addTo(map).start();
+			el56.addTo(map).start();
+			el57.addTo(map).start();
+		}
 		
-		// дизеля
-		el31.addTo(map).start();
-		el32.addTo(map).start();
-		el33.addTo(map).start();
 		
-		
-		el11.addTo(map).start();
-		el12.addTo(map).start();
-		el13.addTo(map).start();
-		el14.addTo(map).start();
-		el15.addTo(map).start();
-		el16.addTo(map).start();
-		el17.addTo(map).start();
-		
-		
-		TopIcon=myIcon;
-		LeftIcon=myIconBlue;
-		
-		// выходы зел
-		el41.addTo(map).start();
-		el42.addTo(map).start();
-		el43.addTo(map).start();
-		el44.addTo(map).start();
-		el45.addTo(map).start();
-		el46.addTo(map).start();
-		el47.addTo(map).start();
-		
-		
-		// выходы синие
-		el51.addTo(map).start();
-		el52.addTo(map).start();
-		el53.addTo(map).start();
-		el54.addTo(map).start();
-		el55.addTo(map).start();
-		el56.addTo(map).start();
-		el57.addTo(map).start();
+		if(cfgUseLines){
+			////////////////////////////////
+			// первый ввод
+			pl_21.addTo(map);
+			
+			pl_1.addTo(map);
+			pl_2.addTo(map);
+			pl_3.addTo(map);
+			pl_4.addTo(map);
+			pl_5.addTo(map);
+			pl_6.addTo(map);
+			pl_7.addTo(map);
+			
+			// дизеля
+			pl_31.addTo(map);
+			pl_32.addTo(map);
+			pl_33.addTo(map);
+			
+			
+			pl_11.addTo(map);
+			pl_12.addTo(map);
+			pl_13.addTo(map);
+			pl_14.addTo(map);
+			pl_15.addTo(map);
+			pl_16.addTo(map);
+			pl_17.addTo(map);
+			
+			
+			// выходы зел
+			pl_41.addTo(map).setStyle({color:'green'});
+			pl_42.addTo(map).setStyle({color:'green'});
+			pl_43.addTo(map).setStyle({color:'green'});
+			pl_44.addTo(map).setStyle({color:'green'});
+			pl_45.addTo(map).setStyle({color:'green'});
+			pl_46.addTo(map).setStyle({color:'green'});
+			pl_47.addTo(map).setStyle({color:'green'});
+			
+			
+			// выходы синие
+			pl_51.addTo(map).setStyle({color:'blue'});
+			pl_52.addTo(map).setStyle({color:'blue'});
+			pl_53.addTo(map).setStyle({color:'blue'});
+			pl_54.addTo(map).setStyle({color:'blue'});
+			pl_55.addTo(map).setStyle({color:'blue'});
+			pl_56.addTo(map).setStyle({color:'blue'});
+			pl_57.addTo(map).setStyle({color:'blue'});
+		}
 		
 		
 	}
@@ -1858,42 +2138,80 @@
 		SetObject("ABP8L","BLUE","NO");
 	
 		StopLines();
-		el11.addTo(map).start();
-		el12.addTo(map).start();
-		el13.addTo(map).start();
-		el14.addTo(map).start();
-		el15.addTo(map).start();
-		el16.addTo(map).start();
-		el17.addTo(map).start();
+		if(cfgUseAnimation){
+			el11.addTo(map).start();
+			el12.addTo(map).start();
+			el13.addTo(map).start();
+			el14.addTo(map).start();
+			el15.addTo(map).start();
+			el16.addTo(map).start();
+			el17.addTo(map).start();
+			
+			
+			el31.addTo(map).start();
+			el32.addTo(map).start();
+			el33.addTo(map).start();
+			
+			// выходы зел
+			TopIcon=myIconBlue;
+			LeftIcon=myIconBlue;
+			
+			el41.addTo(map).start();
+			el42.addTo(map).start();
+			el43.addTo(map).start();
+			el44.addTo(map).start();
+			el45.addTo(map).start();
+			el46.addTo(map).start();
+			el47.addTo(map).start();
+			
+			
+			
+			// выходы синие
+			el51.addTo(map).start();
+			el52.addTo(map).start();
+			el53.addTo(map).start();
+			el54.addTo(map).start();
+			el55.addTo(map).start();
+			el56.addTo(map).start();
+			el57.addTo(map).start();
+		}
 		
 		
-		el31.addTo(map).start();
-		el32.addTo(map).start();
-		el33.addTo(map).start();
-		
-		// выходы зел
-		TopIcon=myIconBlue;
-		LeftIcon=myIconBlue;
-		
-		el41.addTo(map).start();
-		el42.addTo(map).start();
-		el43.addTo(map).start();
-		el44.addTo(map).start();
-		el45.addTo(map).start();
-		el46.addTo(map).start();
-		el47.addTo(map).start();
-		
-		
-		
-		// выходы синие
-		el51.addTo(map).start();
-		el52.addTo(map).start();
-		el53.addTo(map).start();
-		el54.addTo(map).start();
-		el55.addTo(map).start();
-		el56.addTo(map).start();
-		el57.addTo(map).start();
-		
+		if(cfgUseLines){
+			///////////////////
+			pl_11.addTo(map);
+			pl_12.addTo(map);
+			pl_13.addTo(map);
+			pl_14.addTo(map);
+			pl_15.addTo(map);
+			pl_16.addTo(map);
+			pl_17.addTo(map);
+			
+			
+			pl_31.addTo(map);
+			pl_32.addTo(map);
+			pl_33.addTo(map);
+			
+					
+			pl_41.addTo(map).setStyle({color:'blue'});
+			pl_42.addTo(map).setStyle({color:'blue'});
+			pl_43.addTo(map).setStyle({color:'blue'});
+			pl_44.addTo(map).setStyle({color:'blue'});
+			pl_45.addTo(map).setStyle({color:'blue'});
+			pl_46.addTo(map).setStyle({color:'blue'});
+			pl_47.addTo(map).setStyle({color:'blue'});
+			
+			
+			
+			// выходы синие
+			pl_51.addTo(map).setStyle({color:'blue'});
+			pl_52.addTo(map).setStyle({color:'blue'});
+			pl_53.addTo(map).setStyle({color:'blue'});
+			pl_54.addTo(map).setStyle({color:'blue'});
+			pl_55.addTo(map).setStyle({color:'blue'});
+			pl_56.addTo(map).setStyle({color:'blue'});
+			pl_57.addTo(map).setStyle({color:'blue'});
+		}
 		
 	}
 	
@@ -1935,42 +2253,82 @@
 		SetObject("ABP8L","RED","NO");
 	
 		StopLines();
-		// первый ввод
-		el21.addTo(map).start();
 		
-		el1.addTo(map).start();
-		el2.addTo(map).start();
-		el3.addTo(map).start();
-		el4.addTo(map).start();
-		el5.addTo(map).start();
-		el6.addTo(map).start();
-		el7.addTo(map).start();
-		
-		
-		
-		
+		if(cfgUseAnimation){
+			// первый ввод
+			el21.addTo(map).start();
 			
-		TopIcon=myIcon;
-		LeftIcon=myIcon;
+			el1.addTo(map).start();
+			el2.addTo(map).start();
+			el3.addTo(map).start();
+			el4.addTo(map).start();
+			el5.addTo(map).start();
+			el6.addTo(map).start();
+			el7.addTo(map).start();
+			
+			
+			
+			
+				
+			TopIcon=myIcon;
+			LeftIcon=myIcon;
+			
+			// выходы зел
+			el41.addTo(map).start();
+			el42.addTo(map).start();
+			el43.addTo(map).start();
+			el44.addTo(map).start();
+			el45.addTo(map).start();
+			el46.addTo(map).start();
+			el47.addTo(map).start();
+			
+			
+			// выходы синие
+			el51.addTo(map).start();
+			el52.addTo(map).start();
+			el53.addTo(map).start();
+			el54.addTo(map).start();
+			el55.addTo(map).start();
+			el56.addTo(map).start();
+			el57.addTo(map).start();
+		}
 		
-		// выходы зел
-		el41.addTo(map).start();
-		el42.addTo(map).start();
-		el43.addTo(map).start();
-		el44.addTo(map).start();
-		el45.addTo(map).start();
-		el46.addTo(map).start();
-		el47.addTo(map).start();
 		
+		if(cfgUseLines){
+			///////////////////////////
+			// первый ввод
+			pl_21.addTo(map);
+			
+			pl_1.addTo(map);
+			pl_2.addTo(map);
+			pl_3.addTo(map);
+			pl_4.addTo(map);
+			pl_5.addTo(map);
+			pl_6.addTo(map);
+			pl_7.addTo(map);
+			
+			
+			
+			// выходы зел
+			pl_41.addTo(map).setStyle({color:'green'});
+			pl_42.addTo(map).setStyle({color:'green'});
+			pl_43.addTo(map).setStyle({color:'green'});
+			pl_44.addTo(map).setStyle({color:'green'});
+			pl_45.addTo(map).setStyle({color:'green'});
+			pl_46.addTo(map).setStyle({color:'green'});
+			pl_47.addTo(map).setStyle({color:'green'});
+			
+			
+			// выходы синие
+			pl_51.addTo(map).setStyle({color:'green'});
+			pl_52.addTo(map).setStyle({color:'green'});
+			pl_53.addTo(map).setStyle({color:'green'});
+			pl_54.addTo(map).setStyle({color:'green'});
+			pl_55.addTo(map).setStyle({color:'green'});
+			pl_56.addTo(map).setStyle({color:'green'});
+			pl_57.addTo(map).setStyle({color:'green'});
+		}
 		
-		// выходы синие
-		el51.addTo(map).start();
-		el52.addTo(map).start();
-		el53.addTo(map).start();
-		el54.addTo(map).start();
-		el55.addTo(map).start();
-		el56.addTo(map).start();
-		el57.addTo(map).start();
 	}
 	
 	
@@ -2014,41 +2372,75 @@
 		
 	
 		StopLines();
-		el22.addTo(map).start();
-		
-		el1.addTo(map).start();
-		el2.addTo(map).start();
-		el3.addTo(map).start();
-		el4.addTo(map).start();
-		el5.addTo(map).start();
-		el6.addTo(map).start();
-		el7.addTo(map).start();
-		
-
-		
+		if(cfgUseAnimation){
+			el22.addTo(map).start();
 			
-		TopIcon=myIcon;
-		LeftIcon=myIcon;
+			el1.addTo(map).start();
+			el2.addTo(map).start();
+			el3.addTo(map).start();
+			el4.addTo(map).start();
+			el5.addTo(map).start();
+			el6.addTo(map).start();
+			el7.addTo(map).start();
+			
+
+			
+				
+			TopIcon=myIcon;
+			LeftIcon=myIcon;
+			
+			// выходы зел
+			el41.addTo(map).start();
+			el42.addTo(map).start();
+			el43.addTo(map).start();
+			el44.addTo(map).start();
+			el45.addTo(map).start();
+			el46.addTo(map).start();
+			el47.addTo(map).start();
+			
+			
+			// выходы синие
+			el51.addTo(map).start();
+			el52.addTo(map).start();
+			el53.addTo(map).start();
+			el54.addTo(map).start();
+			el55.addTo(map).start();
+			el56.addTo(map).start();
+			el57.addTo(map).start();
+		}
 		
-		// выходы зел
-		el41.addTo(map).start();
-		el42.addTo(map).start();
-		el43.addTo(map).start();
-		el44.addTo(map).start();
-		el45.addTo(map).start();
-		el46.addTo(map).start();
-		el47.addTo(map).start();
 		
-		
-		// выходы синие
-		el51.addTo(map).start();
-		el52.addTo(map).start();
-		el53.addTo(map).start();
-		el54.addTo(map).start();
-		el55.addTo(map).start();
-		el56.addTo(map).start();
-		el57.addTo(map).start();
-		
+		if(cfgUseLines){
+			//////////////////
+			pl_22.addTo(map);
+			
+			pl_1.addTo(map);
+			pl_2.addTo(map);
+			pl_3.addTo(map);
+			pl_4.addTo(map);
+			pl_5.addTo(map);
+			pl_6.addTo(map);
+			pl_7.addTo(map);
+			
+			// выходы зел
+			pl_41.addTo(map).setStyle({color:'green'});
+			pl_42.addTo(map).setStyle({color:'green'});
+			pl_43.addTo(map).setStyle({color:'green'});
+			pl_44.addTo(map).setStyle({color:'green'});
+			pl_45.addTo(map).setStyle({color:'green'});
+			pl_46.addTo(map).setStyle({color:'green'});
+			pl_47.addTo(map).setStyle({color:'green'});
+			
+			
+			// выходы синие
+			pl_51.addTo(map).setStyle({color:'green'});
+			pl_52.addTo(map).setStyle({color:'green'});
+			pl_53.addTo(map).setStyle({color:'green'});
+			pl_54.addTo(map).setStyle({color:'green'});
+			pl_55.addTo(map).setStyle({color:'green'});
+			pl_56.addTo(map).setStyle({color:'green'});
+			pl_57.addTo(map).setStyle({color:'green'});
+		}
 		
 	}
 	
@@ -2179,9 +2571,30 @@
 
         }
         var blinkMode = false;
+		
+		
+		function BlinkDash( myline){
+			if(blinkMode)
+				myline.setStyle({ dashArray:'7,6'});
+			else
+				myline.setStyle({ dashArray:'3,12'});
+		}
+		
+		
+		
         function Blinker() {
+			
+		
+				
             blinkMode = !blinkMode;
             var j;
+			
+			if(cfgUseLines){
+				for (j = 0; j < myPolyLines.length; j++) {
+					BlinkDash(myPolyLines[j]);
+				}
+			}
+			
             for (j = 0; j < myObjects.length; j++) {
 
                 rect = myObjects[j];
