@@ -53,4 +53,37 @@ li { font-size: 16px; margin: 0 0 1px; padding: 0; }
 .ctrl-popup img:hover {
 cursor: hand;
 }
+
+
+@media (min-width: 240px) { 
+	.mapheight {min-height:240px }
+}
+
+@media (min-width: 320px) { 
+	.mapheight {min-height:320px }
+}
 	
+@media (min-width: 576px) { 
+	.mapheight {min-height:576px }
+}
+
+
+@media (min-width: 768px) { 
+	.mapheight  {
+		min-height:768px 
+		}
+ }
+
+
+@media (min-width: 992px) { 
+	.mapheight {
+		min-height:992px
+	}
+ }
+
+
+@media (min-width: 1200px) { 
+	.mapheight {
+		min-height:1200px
+	}
+}
